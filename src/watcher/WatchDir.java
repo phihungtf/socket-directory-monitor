@@ -11,7 +11,7 @@ import java.util.*;
  * Example to watch a directory (or tree) for changes to files.
  */
 
-public class WatchDir {
+public class WatchDir extends Thread {
 
 	private final WatchService watcher;
 	private final Map<WatchKey, Path> keys;
@@ -22,6 +22,12 @@ public class WatchDir {
 	static <T> WatchEvent<T> cast(WatchEvent<?> event) {
 		return (WatchEvent<T>) event;
 	}
+
+	public interface Printable {
+		void print(String event, String path);
+	}
+
+	private Printable printer;
 
 	/**
 	 * Register the given directory with the WatchService
@@ -60,10 +66,11 @@ public class WatchDir {
 	/**
 	 * Creates a WatchService and registers the given directory
 	 */
-	public WatchDir(Path dir, boolean recursive) throws IOException {
+	public WatchDir(Path dir, boolean recursive, Printable printer) throws IOException {
 		this.watcher = FileSystems.getDefault().newWatchService();
 		this.keys = new HashMap<WatchKey, Path>();
 		this.recursive = recursive;
+		this.printer = printer;
 
 		if (recursive) {
 			System.out.format("Scanning %s ...\n", dir);
@@ -81,7 +88,7 @@ public class WatchDir {
 	 * Process all events for keys queued to the watcher
 	 */
 	public void processEvents() {
-		for (;;) {
+		while (!Thread.currentThread().isInterrupted()) {
 			// wait for key to be signalled
 			WatchKey key;
 			try {
@@ -110,7 +117,7 @@ public class WatchDir {
 				Path child = dir.resolve(name);
 
 				// print out event
-				System.out.format("%s: %s\n", event.kind().name(), child);
+				printer.print(event.kind().name(), child.toString());
 
 				// if directory is created, and watching recursively, then
 				// register it and its sub-directories
@@ -136,5 +143,10 @@ public class WatchDir {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void run() {
+		processEvents();
 	}
 }

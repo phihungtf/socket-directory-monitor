@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class MessageData {
 	public enum CommandType {
-		GET_DRIVES, GET_DIRS, GO_UP, GO_DOWN, LIST_FILES, CHANGE_DRIVE, WATCH
+		GET_DRIVES, GET_DIRS, WATCH, STOP, DISCONNECT
 	}
 
 	public enum ResponseStatus {
@@ -25,8 +25,9 @@ public class MessageData {
 		this.data = data;
 	}
 
-	public MessageData(ResponseStatus status, String data) {
+	public MessageData(ResponseStatus status, CommandType command, String data) {
 		this.status = status;
+		this.command = command;
 		this.data = data;
 	}
 

@@ -6,46 +6,6 @@ import java.util.List;
 
 public class DirectoryExplorer {
 	public static final String SEPARATOR = "|";
-	private File currentDirectory;
-
-	public DirectoryExplorer() {
-		currentDirectory = new File("");
-	}
-
-	public List<String> list() {
-		return getDirectories(currentDirectory.getAbsolutePath());
-	}
-
-	public void goUp() {
-		if (currentDirectory.getParent() == null) {
-			return;
-		}
-		File newDirectory = new File(currentDirectory.getParent());
-		if (!newDirectory.exists()) {
-			return;
-		}
-		currentDirectory = newDirectory;
-	}
-
-	public String getCurrentDirectory() {
-		return currentDirectory.getAbsolutePath();
-	}
-
-	public void setCurrentDirectory(String path) {
-		File newDirectory = new File(path);
-		if (!newDirectory.exists()) {
-			return;
-		}
-		currentDirectory = newDirectory;
-	}
-
-	public void goDown(String directory) {
-		File newDirectory = new File(currentDirectory.getAbsolutePath() + "/" + directory);
-		if (!newDirectory.exists()) {
-			return;
-		}
-		currentDirectory = newDirectory;
-	}
 
 	public static List<String> getDrives() {
 		List<String> drives = new ArrayList<>();
