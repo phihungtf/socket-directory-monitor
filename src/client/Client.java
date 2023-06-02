@@ -1,6 +1,5 @@
 package client;
 
-import gui.Monitor;
 import server.SocketThread;
 
 public class Client {

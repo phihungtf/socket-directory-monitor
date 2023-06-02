@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.*;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.*;

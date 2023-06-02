@@ -1,7 +1,6 @@
 import file.*;
 
 import java.io.*;
-import java.util.*;
 import java.net.*;
 import java.nio.file.*;
 
@@ -20,17 +19,25 @@ public class Client implements WatchDir.Printable {
 	private WatchDir watchDir;
 
 	public static void main(String[] args) throws Exception {
-		new Client();
+		if (args.length == 0) {
+			new Client("localhost", 6969);
+		} else if (args.length == 1) {
+			new Client(args[0], 6969);
+		} else if (args.length == 2) {
+			new Client(args[0], Integer.parseInt(args[1]));
+		} else {
+			System.out.println("Invalid arguments");
+		}
 	}
 
-	public Client() {
+	public Client(String host, int port) {
 		GsonBuilder builder = new GsonBuilder();
 		// builder.setPrettyPrinting();
 		Gson gson = builder.create();
 		Boolean isRunning = true;
 
 		try {
-			try (Socket socket = new Socket("localhost", 6969)) {
+			try (Socket socket = new Socket(host, port)) {
 				System.out.println("Connected to server: " + socket.getInetAddress().getHostAddress() + ":"
 						+ socket.getPort());
 

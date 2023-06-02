@@ -90,6 +90,8 @@ public class SocketThread extends Thread {
 				}
 			}
 			close();
+		} catch (SocketException e) {
+			System.out.println("Client stopped");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
